@@ -3,7 +3,7 @@ import os
 
 # Define project paths
 PROJECT_PATH = r"M:\SEM 6 COURSES\BI\ADR_Prediction\ADR_Prediction"
-FAERS_PATH = os.path.join(PROJECT_PATH, "data", "faers24q4")
+FAERS_PATH = os.path.join(PROJECT_PATH, "data", "faers_24q4")
 
 def preprocess_faers():
     """Load and preprocess FAERS data."""
@@ -44,23 +44,41 @@ def preprocess_faers():
     
     
 def preprocess_sider():
-    """Load and preprocess SIDER data."""
-    
+    """Load and preprocess SIDER dataset."""
     SIDER_PATH = os.path.join(PROJECT_PATH, "data", "sider")
 
-    # Load SIDER datasets
+    # Load SIDER side effects dataset
     side_effects = pd.read_csv(os.path.join(SIDER_PATH, "meddra_all_se.tsv"), sep="\t", header=None)
-    indications = pd.read_csv(os.path.join(SIDER_PATH, "meddra_all_indications.tsv"), sep="\t", header=None)
-
-    # Rename columns
-    side_effects.columns = ["drug_id", "stitch_id", "umls_id", "side_effect"]
-    indications.columns = ["drug_id", "stitch_id", "umls_id", "indication"]
-
-    # Save processed data
+    side_effects.columns = ["drug_id", "stitch_id", "umls_id", "type", "umls_id_version", "side_effect"]
+    side_effects = side_effects[["drug_id", "side_effect"]]
     side_effects.to_csv(os.path.join(SIDER_PATH, "processed_side_effects.csv"), index=False)
-    indications.to_csv(os.path.join(SIDER_PATH, "processed_indications.csv"), index=False)
+    
+    print("✅ SIDER side effects processed successfully!")
 
-    print("SIDER data preprocessing completed.")
+    # Load SIDER indications dataset
+    indications_file = os.path.join(SIDER_PATH, "meddra_all_indications.tsv")
+    
+    if os.path.exists(indications_file):
+        indications = pd.read_csv(indications_file, sep="\t", header=None)
+
+        # Print the number of columns detected
+        print(f"Indications dataset has {indications.shape[1]} columns.")
+
+        # Define the correct column names
+        indications.columns = ["stitch_id", "umls_id", "concept_name", "meddra_concept_type", "meddra_id", "indication", "extra_column"]
+
+        # Keep only relevant columns
+        indications = indications[["stitch_id", "indication"]]
+
+        # Save the processed indications
+        indications.to_csv(os.path.join(SIDER_PATH, "processed_indications.csv"), index=False)
+        
+        print("✅ SIDER indications processed successfully!")
+    else:
+        print("⚠️ Indications file not found! Skipping...")
+
+
+
 
 # Run preprocessing
 if __name__ == "__main__":
