@@ -1,0 +1,15 @@
+# Ignore FAERS and SIDER raw data files
+data/faers_24q4/
+data/sider/
+
+# Ignore processed files
+data/processed_faers.csv
+data/X_features.csv
+data/y_labels.csv
+
+# Ignore all CSV files in the data directory
+data/*.csv
+
+# Ignore temporary and system files
+__pycache__/
+*.log
