@@ -1,0 +1,2 @@
+data/faers_24q4/*.txt filter=lfs diff=lfs merge=lfs -text
+data/faers_2024q4/ASCII/*.txt filter=lfs diff=lfs merge=lfs -text
