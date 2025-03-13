@@ -13,3 +13,10 @@ data/*.csv
 # Ignore temporary and system files
 __pycache__/
 *.log
+
+data/faers_24q4/*
+data/faers_2024q4/*
+data/X_features.csv
+data/y_labels.csv
+data/processed_faers.csv
+
